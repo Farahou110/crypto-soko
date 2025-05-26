@@ -160,11 +160,13 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
+                      const value = payload[0].value;
+                      const price = typeof value === 'number' ? value : parseFloat(value?.toString() || '0');
                       return (
                         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
                           <p className="font-semibold text-gray-800">{data.fullDate}</p>
                           <p className="text-emerald-600 font-bold">
-                            KSh {payload[0].value?.toFixed(2)} per {item.unit}
+                            KSh {price.toFixed(2)} per {item.unit}
                           </p>
                         </div>
                       );
