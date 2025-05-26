@@ -15,9 +15,10 @@ interface FoodItem {
 
 interface FoodPriceCardProps {
   item: FoodItem;
+  onClick: () => void;
 }
 
-const FoodPriceCard: React.FC<FoodPriceCardProps> = ({ item }) => {
+const FoodPriceCard: React.FC<FoodPriceCardProps> = ({ item, onClick }) => {
   const priceChange = item.currentPrice - item.previousPrice;
   const percentageChange = ((priceChange / item.previousPrice) * 100);
   
@@ -45,7 +46,10 @@ const FoodPriceCard: React.FC<FoodPriceCardProps> = ({ item }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group hover:scale-105">
+    <div 
+      onClick={onClick}
+      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group hover:scale-105 cursor-pointer"
+    >
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -83,6 +87,10 @@ const FoodPriceCard: React.FC<FoodPriceCardProps> = ({ item }) => {
             <span>Previous: KSh {item.previousPrice.toFixed(2)}</span>
             <span>Change: KSh {priceChange.toFixed(2)}</span>
           </div>
+        </div>
+        
+        <div className="mt-2 text-xs text-gray-400 text-center">
+          Click to view price history
         </div>
       </div>
     </div>

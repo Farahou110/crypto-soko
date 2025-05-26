@@ -4,11 +4,14 @@ import Header from '@/components/Header';
 import FoodPriceCard from '@/components/FoodPriceCard';
 import CountyFilter from '@/components/CountyFilter';
 import SearchBar from '@/components/SearchBar';
-import { foodPricesData } from '@/data/foodPrices';
+import PriceChart from '@/components/PriceChart';
+import { foodPricesData, FoodItem } from '@/data/foodPrices';
 
 const Index = () => {
   const [selectedCounty, setSelectedCounty] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedItem, setSelectedItem] = useState<FoodItem | null>(null);
+  const [isChartOpen, setIsChartOpen] = useState(false);
 
   const filteredData = foodPricesData.filter(item => {
     const matchesCounty = selectedCounty === 'All' || item.county === selectedCounty;
@@ -16,6 +19,16 @@ const Index = () => {
                          item.englishName.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCounty && matchesSearch;
   });
+
+  const handleItemClick = (item: FoodItem) => {
+    setSelectedItem(item);
+    setIsChartOpen(true);
+  };
+
+  const handleCloseChart = () => {
+    setIsChartOpen(false);
+    setSelectedItem(null);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-orange-50">
@@ -41,7 +54,11 @@ const Index = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredData.map((item) => (
-            <FoodPriceCard key={`${item.name}-${item.county}`} item={item} />
+            <FoodPriceCard 
+              key={`${item.name}-${item.county}`} 
+              item={item} 
+              onClick={() => handleItemClick(item)}
+            />
           ))}
         </div>
 
@@ -50,6 +67,12 @@ const Index = () => {
             <p className="text-gray-500 text-lg">No food items found matching your criteria.</p>
           </div>
         )}
+
+        <PriceChart 
+          item={selectedItem}
+          isOpen={isChartOpen}
+          onClose={handleCloseChart}
+        />
       </main>
     </div>
   );
