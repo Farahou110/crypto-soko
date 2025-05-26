@@ -47,7 +47,12 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
       
       data.push({
         date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        price: parseFloat(price.toFixed(2))
+        price: parseFloat(price.toFixed(2)),
+        fullDate: date.toLocaleDateString('en-US', { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric' 
+        })
       });
     }
     
@@ -58,78 +63,163 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
   
   const chartConfig = {
     price: {
-      label: "Price (KSh)",
+      label: `Price (KSh per ${item.unit})`,
       color: "#10b981",
     },
   };
 
+  const minPrice = Math.min(...chartData.map(d => d.price));
+  const maxPrice = Math.max(...chartData.map(d => d.price));
+  const priceRange = maxPrice - minPrice;
+  const yAxisMin = Math.max(0, minPrice - priceRange * 0.1);
+  const yAxisMax = maxPrice + priceRange * 0.1;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh]">
+      <DialogContent className="max-w-5xl max-h-[85vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            {item.name} ({item.englishName}) - Price History
+          <DialogTitle className="text-2xl font-bold text-gray-800">
+            {item.name} ({item.englishName})
           </DialogTitle>
-          <p className="text-sm text-gray-600">
-            {item.county} • Current: KSh {item.currentPrice.toFixed(2)}/{item.unit}
-          </p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-sm text-gray-600 font-medium">
+              {item.county} County • Current Price: KSh {item.currentPrice.toFixed(2)} per {item.unit}
+            </p>
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+              item.currentPrice > item.previousPrice 
+                ? 'bg-red-100 text-red-700' 
+                : item.currentPrice < item.previousPrice 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-gray-100 text-gray-700'
+            }`}>
+              {item.currentPrice > item.previousPrice ? '↗' : item.currentPrice < item.previousPrice ? '↘' : '→'} 
+              {' '}30-Day Trend
+            </span>
+          </div>
         </DialogHeader>
         
-        <div className="h-96 w-full mt-4">
+        <div className="h-[400px] w-full mt-6 bg-gradient-to-br from-gray-50 to-white p-4 rounded-lg border">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-700 mb-1">Price History (Last 30 Days)</h3>
+            <p className="text-sm text-gray-500">Track price changes over time in {item.county}</p>
+          </div>
+          
           <ChartContainer config={chartConfig}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
+              <LineChart 
+                data={chartData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+              >
+                <defs>
+                  <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.05}/>
+                  </linearGradient>
+                </defs>
+                
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  stroke="#e5e7eb" 
+                  opacity={0.7}
+                />
+                
                 <XAxis 
                   dataKey="date" 
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
-                  axisLine={false}
+                  axisLine={{ stroke: '#d1d5db', strokeWidth: 1 }}
+                  tick={{ fill: '#6b7280' }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
+                  interval={Math.ceil(chartData.length / 8)}
+                  label={{ 
+                    value: 'Date', 
+                    position: 'insideBottom', 
+                    offset: -5,
+                    style: { textAnchor: 'middle', fill: '#374151', fontSize: '12px', fontWeight: 'bold' }
+                  }}
                 />
+                
                 <YAxis 
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `KSh ${value}`}
+                  axisLine={{ stroke: '#d1d5db', strokeWidth: 1 }}
+                  tick={{ fill: '#6b7280' }}
+                  domain={[yAxisMin, yAxisMax]}
+                  tickFormatter={(value) => `${value.toFixed(0)}`}
+                  label={{ 
+                    value: `Price (KSh per ${item.unit})`, 
+                    angle: -90, 
+                    position: 'insideLeft',
+                    style: { textAnchor: 'middle', fill: '#374151', fontSize: '12px', fontWeight: 'bold' }
+                  }}
                 />
+                
                 <ChartTooltip 
-                  content={<ChartTooltipContent />}
-                  formatter={(value: number) => [`KSh ${value.toFixed(2)}`, 'Price']}
-                  labelFormatter={(label) => `Date: ${label}`}
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+                          <p className="font-semibold text-gray-800">{data.fullDate}</p>
+                          <p className="text-emerald-600 font-bold">
+                            KSh {payload[0].value?.toFixed(2)} per {item.unit}
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
                 />
+                
                 <Line 
                   type="monotone" 
                   dataKey="price" 
-                  stroke="var(--color-price)" 
-                  strokeWidth={2}
-                  dot={{ fill: "var(--color-price)", strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6 }}
+                  stroke="#10b981" 
+                  strokeWidth={3}
+                  dot={{ 
+                    fill: "#10b981", 
+                    strokeWidth: 2, 
+                    r: 4,
+                    stroke: "#ffffff"
+                  }}
+                  activeDot={{ 
+                    r: 6, 
+                    stroke: "#10b981",
+                    strokeWidth: 2,
+                    fill: "#ffffff"
+                  }}
+                  fill="url(#priceGradient)"
                 />
               </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </div>
         
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg border border-emerald-100">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="text-gray-600">Current Price</p>
-              <p className="font-semibold">KSh {item.currentPrice.toFixed(2)}</p>
+            <div className="text-center">
+              <p className="text-gray-600 font-medium">Current Price</p>
+              <p className="font-bold text-lg text-emerald-600">KSh {item.currentPrice.toFixed(2)}</p>
             </div>
-            <div>
-              <p className="text-gray-600">Previous Price</p>
-              <p className="font-semibold">KSh {item.previousPrice.toFixed(2)}</p>
+            <div className="text-center">
+              <p className="text-gray-600 font-medium">Previous Price</p>
+              <p className="font-bold text-lg text-gray-700">KSh {item.previousPrice.toFixed(2)}</p>
             </div>
-            <div>
-              <p className="text-gray-600">Change</p>
-              <p className={`font-semibold ${item.currentPrice > item.previousPrice ? 'text-red-500' : 'text-green-500'}`}>
+            <div className="text-center">
+              <p className="text-gray-600 font-medium">Price Change</p>
+              <p className={`font-bold text-lg ${
+                item.currentPrice > item.previousPrice ? 'text-red-500' : 
+                item.currentPrice < item.previousPrice ? 'text-green-500' : 'text-gray-500'
+              }`}>
                 {item.currentPrice > item.previousPrice ? '+' : ''}
                 {((item.currentPrice - item.previousPrice) / item.previousPrice * 100).toFixed(1)}%
               </p>
             </div>
-            <div>
-              <p className="text-gray-600">Category</p>
-              <p className="font-semibold capitalize">{item.category}</p>
+            <div className="text-center">
+              <p className="text-gray-600 font-medium">Category</p>
+              <p className="font-bold text-lg text-gray-700 capitalize">{item.category}</p>
             </div>
           </div>
         </div>
