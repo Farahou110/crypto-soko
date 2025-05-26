@@ -6,7 +6,8 @@
 git clone https://github.com/Farahou110/chakula-bei-linganisha
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd chakula-bei-linganisha/
+
 
 # Step 3: Install the necessary dependencies.
 npm i
