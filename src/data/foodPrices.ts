@@ -21,8 +21,7 @@ export const foodPricesData: FoodItem[] = [
   { name: 'Nyanya', englishName: 'Tomatoes', currentPrice: 60.00, previousPrice: 65.00, county: 'Nairobi', unit: 'kg', category: 'vegetables' },
   { name: 'Nyanya', englishName: 'Tomatoes', currentPrice: 45.00, previousPrice: 50.00, county: 'Meru', unit: 'kg', category: 'vegetables' },
   { name: 'Vitunguu', englishName: 'Onions', currentPrice: 70.00, previousPrice: 68.00, county: 'Kisumu', unit: 'kg', category: 'vegetables' },
-  { name: 'Kabeji
-    ', englishName: 'Cabbage', currentPrice: 35.00, previousPrice: 40.00, county: 'Nyeri', unit: 'piece', category: 'vegetables' },
+  { name: 'Kabeji', englishName: 'Cabbage', currentPrice: 35.00, previousPrice: 40.00, county: 'Nyeri', unit: 'piece', category: 'vegetables' },
   { name: 'Karoti', englishName: 'Carrots', currentPrice: 80.00, previousPrice: 75.00, county: 'Nakuru', unit: 'kg', category: 'vegetables' },
   
   // Fruits
