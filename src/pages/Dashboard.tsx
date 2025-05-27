@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import WeeklyHighlights from '@/components/dashboard/WeeklyHighlights';
 import NewProducts from '@/components/dashboard/NewProducts';
@@ -14,6 +17,12 @@ const Dashboard = () => {
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
+          <Link to="/">
+            <Button variant="outline" className="mb-4">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Food Market Dashboard</h1>
           <p className="text-lg text-gray-600">
             Monitor market trends, track price changes, and discover new products
