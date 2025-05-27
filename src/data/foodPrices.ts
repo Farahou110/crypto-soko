@@ -13,15 +13,16 @@ export const foodPricesData: FoodItem[] = [
   // Grains
   { name: 'Mahindi', englishName: 'Maize', currentPrice: 85.50, previousPrice: 80.00, county: 'Nairobi', unit: 'kg', category: 'grains' },
   { name: 'Mahindi', englishName: 'Maize', currentPrice: 75.00, previousPrice: 78.50, county: 'Nakuru', unit: 'kg', category: 'grains' },
-  { name: 'Mchere', englishName: 'Rice', currentPrice: 145.00, previousPrice: 140.00, county: 'Mombasa', unit: 'kg', category: 'grains' },
-  { name: 'Mchere', englishName: 'Rice', currentPrice: 150.00, previousPrice: 145.00, county: 'Nairobi', unit: 'kg', category: 'grains' },
+  { name: 'Mchele', englishName: 'Rice', currentPrice: 145.00, previousPrice: 140.00, county: 'Mombasa', unit: 'kg', category: 'grains' },
+  { name: 'Mchele', englishName: 'Rice', currentPrice: 150.00, previousPrice: 145.00, county: 'Nairobi', unit: 'kg', category: 'grains' },
   { name: 'Ngano', englishName: 'Wheat Flour', currentPrice: 120.00, previousPrice: 115.00, county: 'Eldoret', unit: 'kg', category: 'grains' },
   
   // Vegetables
   { name: 'Nyanya', englishName: 'Tomatoes', currentPrice: 60.00, previousPrice: 65.00, county: 'Nairobi', unit: 'kg', category: 'vegetables' },
   { name: 'Nyanya', englishName: 'Tomatoes', currentPrice: 45.00, previousPrice: 50.00, county: 'Meru', unit: 'kg', category: 'vegetables' },
   { name: 'Vitunguu', englishName: 'Onions', currentPrice: 70.00, previousPrice: 68.00, county: 'Kisumu', unit: 'kg', category: 'vegetables' },
-  { name: 'Kabichi', englishName: 'Cabbage', currentPrice: 35.00, previousPrice: 40.00, county: 'Nyeri', unit: 'piece', category: 'vegetables' },
+  { name: 'Kabeji
+    ', englishName: 'Cabbage', currentPrice: 35.00, previousPrice: 40.00, county: 'Nyeri', unit: 'piece', category: 'vegetables' },
   { name: 'Karoti', englishName: 'Carrots', currentPrice: 80.00, previousPrice: 75.00, county: 'Nakuru', unit: 'kg', category: 'vegetables' },
   
   // Fruits
