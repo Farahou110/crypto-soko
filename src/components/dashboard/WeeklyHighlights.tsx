@@ -7,12 +7,12 @@ import { foodPricesData } from '@/data/foodPrices';
 const WeeklyHighlights = () => {
   // Calculate some mock highlights based on existing data
   const getHighlights = () => {
-    const prices = foodPricesData.map(item => item.price);
+    const prices = foodPricesData.map(item => item.currentPrice);
     const maxPrice = Math.max(...prices);
     const minPrice = Math.min(...prices);
     
-    const mostExpensive = foodPricesData.find(item => item.price === maxPrice);
-    const cheapest = foodPricesData.find(item => item.price === minPrice);
+    const mostExpensive = foodPricesData.find(item => item.currentPrice === maxPrice);
+    const cheapest = foodPricesData.find(item => item.currentPrice === minPrice);
     
     return {
       mostExpensive,
@@ -35,8 +35,8 @@ const WeeklyHighlights = () => {
     },
     {
       title: "Best Value This Week",
-      item: highlights.cheapest?.name || "Rice",
-      change: `KSh ${highlights.cheapest?.price || 50}`,
+      item: highlights.cheapest?.englishName || "Rice",
+      change: `KSh ${highlights.cheapest?.currentPrice || 50}`,
       icon: Star,
       color: "text-green-600",
       description: "Excellent quality at competitive price"
@@ -77,8 +77,8 @@ const WeeklyHighlights = () => {
             <CardTitle className="text-sm font-medium text-gray-600">Most Expensive</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KSh {highlights.mostExpensive?.price}</div>
-            <p className="text-xs text-gray-500">{highlights.mostExpensive?.name}</p>
+            <div className="text-2xl font-bold">KSh {highlights.mostExpensive?.currentPrice}</div>
+            <p className="text-xs text-gray-500">{highlights.mostExpensive?.englishName}</p>
           </CardContent>
         </Card>
 
@@ -87,8 +87,8 @@ const WeeklyHighlights = () => {
             <CardTitle className="text-sm font-medium text-gray-600">Best Deal</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">KSh {highlights.cheapest?.price}</div>
-            <p className="text-xs text-gray-500">{highlights.cheapest?.name}</p>
+            <div className="text-2xl font-bold">KSh {highlights.cheapest?.currentPrice}</div>
+            <p className="text-xs text-gray-500">{highlights.cheapest?.englishName}</p>
           </CardContent>
         </Card>
 
