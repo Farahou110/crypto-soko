@@ -3,8 +3,16 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { TrendingUp, TrendingDown, Calendar, MapPin, BarChart3, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Calendar, MapPin, BarChart3, Activity, Building2, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+interface PriceSource {
+  name: string;
+  price: number;
+  lastUpdated: string;
+  reliability: 'high' | 'medium' | 'low';
+}
 
 interface FoodItem {
   name: string;
@@ -14,6 +22,7 @@ interface FoodItem {
   county: string;
   unit: string;
   category: string;
+  sources: PriceSource[];
 }
 
 interface PriceChartProps {
@@ -306,6 +315,62 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
               <p className="font-bold text-2xl text-gray-800 dark:text-gray-200 capitalize">{item.category}</p>
             </div>
           </div>
+
+          {/* Price Sources Section */}
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                <Building2 className="h-5 w-5 text-blue-600" />
+                Price Sources
+              </CardTitle>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Verified retailers and vendors reporting this price
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {item.sources.map((source, index) => (
+                  <div 
+                    key={index}
+                    className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg transition-shadow bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-750"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-blue-600" />
+                        <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
+                          {source.name}
+                        </h4>
+                      </div>
+                      <Badge 
+                        variant={source.reliability === 'high' ? 'default' : 'secondary'}
+                        className={`text-xs ${
+                          source.reliability === 'high' 
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' 
+                            : source.reliability === 'medium'
+                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                            : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                        }`}
+                      >
+                        {source.reliability}
+                      </Badge>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-400">Price</span>
+                        <span className="font-bold text-lg text-emerald-600 dark:text-emerald-400">
+                          KSh {source.price.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                        <Clock className="h-3 w-3" />
+                        <span>Updated {source.lastUpdated}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </DialogContent>
     </Dialog>
