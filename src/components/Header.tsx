@@ -14,7 +14,7 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Chakula Bei</h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Food Price Tracker</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Commodity Price Tracker</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
