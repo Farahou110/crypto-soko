@@ -37,8 +37,6 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  if (!item) return null;
-
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setDragStart({
@@ -76,6 +74,8 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
       setPosition({ x: 0, y: 0 });
     }
   }, [isOpen]);
+
+  if (!item) return null;
 
   // Generate more realistic historical data with volatility
   const generateHistoricalData = (currentPrice: number, previousPrice: number) => {
