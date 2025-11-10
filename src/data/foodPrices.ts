@@ -4,6 +4,7 @@ export interface PriceSource {
   price: number;
   lastUpdated: string;
   reliability: 'high' | 'medium' | 'low';
+  url?: string;
 }
 
 export interface FoodItem {
@@ -20,27 +21,27 @@ export interface FoodItem {
 export const foodPricesData: FoodItem[] = [
   // Grains
   { name: 'Mahindi', englishName: 'Maize', currentPrice: 85.50, previousPrice: 80.00, county: 'Nairobi', unit: 'kg', category: 'grains', sources: [
-    { name: 'Naivas Supermarket', price: 87.00, lastUpdated: '2 hours ago', reliability: 'high' },
-    { name: 'Carrefour', price: 85.50, lastUpdated: '5 hours ago', reliability: 'high' },
-    { name: 'Quickmart', price: 84.00, lastUpdated: '1 day ago', reliability: 'medium' }
+    { name: 'Naivas Supermarket', price: 87.00, lastUpdated: '2 hours ago', reliability: 'high', url: 'https://naivas.online' },
+    { name: 'Carrefour', price: 85.50, lastUpdated: '5 hours ago', reliability: 'high', url: 'https://carrefourkenya.com' },
+    { name: 'Quickmart', price: 84.00, lastUpdated: '1 day ago', reliability: 'medium', url: 'https://quickmart.co.ke' }
   ]},
   { name: 'Mahindi', englishName: 'Maize', currentPrice: 75.00, previousPrice: 78.50, county: 'Nakuru', unit: 'kg', category: 'grains', sources: [
-    { name: 'Tuskys', price: 75.00, lastUpdated: '3 hours ago', reliability: 'high' },
+    { name: 'Tuskys', price: 75.00, lastUpdated: '3 hours ago', reliability: 'high', url: 'https://tuskys.ke' },
     { name: 'Local Market', price: 73.50, lastUpdated: '6 hours ago', reliability: 'medium' }
   ]},
   { name: 'Mchele', englishName: 'Rice', currentPrice: 145.00, previousPrice: 140.00, county: 'Mombasa', unit: 'kg', category: 'grains', sources: [
-    { name: 'Naivas Supermarket', price: 145.00, lastUpdated: '1 hour ago', reliability: 'high' },
-    { name: 'Chandarana', price: 147.00, lastUpdated: '4 hours ago', reliability: 'high' },
-    { name: 'Jumia', price: 142.00, lastUpdated: '1 day ago', reliability: 'medium' }
+    { name: 'Naivas Supermarket', price: 145.00, lastUpdated: '1 hour ago', reliability: 'high', url: 'https://naivas.online' },
+    { name: 'Chandarana', price: 147.00, lastUpdated: '4 hours ago', reliability: 'high', url: 'https://chandarana.co.ke' },
+    { name: 'Jumia', price: 142.00, lastUpdated: '1 day ago', reliability: 'medium', url: 'https://jumia.co.ke' }
   ]},
   { name: 'Mchele', englishName: 'Rice', currentPrice: 150.00, previousPrice: 145.00, county: 'Nairobi', unit: 'kg', category: 'grains', sources: [
-    { name: 'Carrefour', price: 150.00, lastUpdated: '2 hours ago', reliability: 'high' },
-    { name: 'Naivas Supermarket', price: 149.50, lastUpdated: '3 hours ago', reliability: 'high' },
-    { name: 'Quickmart', price: 151.00, lastUpdated: '5 hours ago', reliability: 'medium' }
+    { name: 'Carrefour', price: 150.00, lastUpdated: '2 hours ago', reliability: 'high', url: 'https://carrefourkenya.com' },
+    { name: 'Naivas Supermarket', price: 149.50, lastUpdated: '3 hours ago', reliability: 'high', url: 'https://naivas.online' },
+    { name: 'Quickmart', price: 151.00, lastUpdated: '5 hours ago', reliability: 'medium', url: 'https://quickmart.co.ke' }
   ]},
   { name: 'Ngano', englishName: 'Wheat Flour', currentPrice: 120.00, previousPrice: 115.00, county: 'Eldoret', unit: 'kg', category: 'grains', sources: [
-    { name: 'Naivas Supermarket', price: 120.00, lastUpdated: '4 hours ago', reliability: 'high' },
-    { name: 'Tuskys', price: 118.50, lastUpdated: '1 day ago', reliability: 'medium' }
+    { name: 'Naivas Supermarket', price: 120.00, lastUpdated: '4 hours ago', reliability: 'high', url: 'https://naivas.online' },
+    { name: 'Tuskys', price: 118.50, lastUpdated: '1 day ago', reliability: 'medium', url: 'https://tuskys.ke' }
   ]},
   
   // Vegetables

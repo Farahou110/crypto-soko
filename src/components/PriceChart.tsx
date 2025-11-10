@@ -12,6 +12,7 @@ interface PriceSource {
   price: number;
   lastUpdated: string;
   reliability: 'high' | 'medium' | 'low';
+  url?: string;
 }
 
 interface FoodItem {
@@ -392,9 +393,20 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Building2 className="h-4 w-4 text-blue-600" />
-                        <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
-                          {source.name}
-                        </h4>
+                        {source.url ? (
+                          <a 
+                            href={source.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="font-semibold text-blue-600 dark:text-blue-400 text-sm hover:underline"
+                          >
+                            {source.name}
+                          </a>
+                        ) : (
+                          <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
+                            {source.name}
+                          </h4>
+                        )}
                       </div>
                       <Badge 
                         variant={source.reliability === 'high' ? 'default' : 'secondary'}
