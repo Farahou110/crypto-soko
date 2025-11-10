@@ -156,7 +156,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         ref={dialogRef}
-        className="max-w-[90vw] w-[90vw] max-h-[90vh] overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-2xl"
+        className="max-w-[90vw] w-[90vw] max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-2xl"
         style={{
           transform: `translate(${position.x}px, ${position.y}px) scale(1)`,
           transformOrigin: 'center center',
