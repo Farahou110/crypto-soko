@@ -156,9 +156,10 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         ref={dialogRef}
-        className="max-w-7xl max-h-[90vh] overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-2xl"
+        className="max-w-[90vw] w-[90vw] max-h-[90vh] overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-2xl"
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          transform: `translate(${position.x}px, ${position.y}px) scale(1)`,
+          transformOrigin: 'center center',
           cursor: isDragging ? 'grabbing' : 'default'
         }}
       >
@@ -221,7 +222,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
               </p>
             </div>
             
-            <ChartContainer config={chartConfig} className="h-[400px]">
+            <ChartContainer config={chartConfig} className="h-[40vh] min-h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart 
                   data={chartData}
