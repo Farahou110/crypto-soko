@@ -77,6 +77,9 @@ const Header = () => {
               <MapPin className="h-4 w-4" />
               <span className="text-sm">Kenya Counties</span>
             </div>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
+              Admin
+            </Button>
             <ThemeToggle />
             {user ? (
               <DropdownMenu>

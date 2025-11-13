@@ -1,1 +1,4 @@
 project_id = "odkfvrmvavwpfynlqfez"
+
+[functions.scrape-prices]
+verify_jwt = false
