@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
-import { Plus, Edit, Trash2, Package } from 'lucide-react';
+import { Plus, Edit, Trash2, Package, ArrowLeft } from 'lucide-react';
 
 interface InventoryItem {
   id: string;
@@ -185,6 +185,12 @@ const Inventory = () => {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-orange-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
+        <Link to="/">
+          <Button variant="outline" className="mb-4">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </Link>
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
