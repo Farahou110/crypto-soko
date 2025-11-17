@@ -25,8 +25,7 @@ export const foodPricesData: FoodItem[] = [
     { name: 'Carrefour', price: 85.50, lastUpdated: '5 hours ago', reliability: 'high', url: 'https://carrefourkenya.com' },
     { name: 'Quickmart', price: 84.00, lastUpdated: '1 day ago', reliability: 'medium', url: 'https://quickmart.co.ke' }
   ]},
-  { name: 'Mahindi', englishName: 'Maize', currentPrice: 75.00, previousPrice: 78.50, county: 'Nakuru', unit: 'kg', category: 'grains', sources: [
-    { name: 'Tuskys', price: 75.00, lastUpdated: '3 hours ago', reliability: 'high', url: 'https://tuskys.ke' },
+  { name: 'Mahindi', englishName: 'Maize', currentPrice: 73.50, previousPrice: 78.50, county: 'Nakuru', unit: 'kg', category: 'grains', sources: [
     { name: 'Local Market', price: 73.50, lastUpdated: '6 hours ago', reliability: 'medium' }
   ]},
   { name: 'Mchele', englishName: 'Rice', currentPrice: 145.00, previousPrice: 140.00, county: 'Mombasa', unit: 'kg', category: 'grains', sources: [
@@ -40,8 +39,7 @@ export const foodPricesData: FoodItem[] = [
     { name: 'Quickmart', price: 151.00, lastUpdated: '5 hours ago', reliability: 'medium', url: 'https://quickmart.co.ke' }
   ]},
   { name: 'Ngano', englishName: 'Wheat Flour', currentPrice: 120.00, previousPrice: 115.00, county: 'Eldoret', unit: 'kg', category: 'grains', sources: [
-    { name: 'Naivas Supermarket', price: 120.00, lastUpdated: '4 hours ago', reliability: 'high', url: 'https://naivas.online' },
-    { name: 'Tuskys', price: 118.50, lastUpdated: '1 day ago', reliability: 'medium', url: 'https://tuskys.ke' }
+    { name: 'Naivas Supermarket', price: 120.00, lastUpdated: '4 hours ago', reliability: 'high', url: 'https://naivas.online' }
   ]},
   
   // Vegetables
@@ -54,8 +52,7 @@ export const foodPricesData: FoodItem[] = [
     { name: 'Local Market', price: 45.00, lastUpdated: '2 hours ago', reliability: 'high' },
     { name: 'Farmers Cooperative', price: 43.50, lastUpdated: '6 hours ago', reliability: 'medium' }
   ]},
-  { name: 'Vitunguu', englishName: 'Onions', currentPrice: 70.00, previousPrice: 68.00, county: 'Kisumu', unit: 'kg', category: 'vegetables', sources: [
-    { name: 'Tuskys', price: 70.00, lastUpdated: '3 hours ago', reliability: 'high' },
+  { name: 'Vitunguu', englishName: 'Onions', currentPrice: 72.00, previousPrice: 68.00, county: 'Kisumu', unit: 'kg', category: 'vegetables', sources: [
     { name: 'Naivas Supermarket', price: 72.00, lastUpdated: '4 hours ago', reliability: 'high' }
   ]},
   { name: 'Kabeji', englishName: 'Cabbage', currentPrice: 35.00, previousPrice: 40.00, county: 'Nyeri', unit: 'piece', category: 'vegetables', sources: [
@@ -73,16 +70,14 @@ export const foodPricesData: FoodItem[] = [
     { name: 'Chandarana', price: 92.00, lastUpdated: '4 hours ago', reliability: 'high' },
     { name: 'Local Market', price: 88.00, lastUpdated: '6 hours ago', reliability: 'medium' }
   ]},
-  { name: 'Machungwa', englishName: 'Oranges', currentPrice: 120.00, previousPrice: 125.00, county: 'Machakos', unit: 'kg', category: 'fruits', sources: [
-    { name: 'Tuskys', price: 120.00, lastUpdated: '3 hours ago', reliability: 'high' },
+  { name: 'Machungwa', englishName: 'Oranges', currentPrice: 118.00, previousPrice: 125.00, county: 'Machakos', unit: 'kg', category: 'fruits', sources: [
     { name: 'Farmers Market', price: 118.00, lastUpdated: '1 day ago', reliability: 'medium' }
   ]},
   { name: 'Maembe', englishName: 'Mangoes', currentPrice: 150.00, previousPrice: 140.00, county: 'Mombasa', unit: 'kg', category: 'fruits', sources: [
     { name: 'Naivas Supermarket', price: 150.00, lastUpdated: '2 hours ago', reliability: 'high' },
     { name: 'Local Vendors', price: 145.00, lastUpdated: '5 hours ago', reliability: 'medium' }
   ]},
-  { name: 'Mapapai', englishName: 'Papaya', currentPrice: 80.00, previousPrice: 85.00, county: 'Kisumu', unit: 'kg', category: 'fruits', sources: [
-    { name: 'Tuskys', price: 80.00, lastUpdated: '4 hours ago', reliability: 'high' },
+  { name: 'Mapapai', englishName: 'Papaya', currentPrice: 78.00, previousPrice: 85.00, county: 'Kisumu', unit: 'kg', category: 'fruits', sources: [
     { name: 'Local Market', price: 78.00, lastUpdated: '8 hours ago', reliability: 'medium' }
   ]},
   
@@ -118,8 +113,7 @@ export const foodPricesData: FoodItem[] = [
     { name: 'Naivas Supermarket', price: 410.00, lastUpdated: '4 hours ago', reliability: 'high' },
     { name: 'Local Vendors', price: 390.00, lastUpdated: '6 hours ago', reliability: 'medium' }
   ]},
-  { name: 'Maharagwe', englishName: 'Beans', currentPrice: 160.00, previousPrice: 155.00, county: 'Kitale', unit: 'kg', category: 'proteins', sources: [
-    { name: 'Tuskys', price: 160.00, lastUpdated: '3 hours ago', reliability: 'high' },
+  { name: 'Maharagwe', englishName: 'Beans', currentPrice: 158.00, previousPrice: 155.00, county: 'Kitale', unit: 'kg', category: 'proteins', sources: [
     { name: 'Farmers Cooperative', price: 158.00, lastUpdated: '1 day ago', reliability: 'medium' }
   ]},
   { name: 'Dengu', englishName: 'Green Grams', currentPrice: 180.00, previousPrice: 175.00, county: 'Machakos', unit: 'kg', category: 'proteins', sources: [
@@ -129,12 +123,10 @@ export const foodPricesData: FoodItem[] = [
   
   // Additional items across more counties
   { name: 'Mahindi', englishName: 'Maize', currentPrice: 72.00, previousPrice: 75.00, county: 'Kitale', unit: 'kg', category: 'grains', sources: [
-    { name: 'Farmers Cooperative', price: 72.00, lastUpdated: '3 hours ago', reliability: 'high' },
-    { name: 'Tuskys', price: 74.00, lastUpdated: '1 day ago', reliability: 'medium' }
+    { name: 'Farmers Cooperative', price: 72.00, lastUpdated: '3 hours ago', reliability: 'high' }
   ]},
   { name: 'Vitunguu', englishName: 'Onions', currentPrice: 65.00, previousPrice: 70.00, county: 'Meru', unit: 'kg', category: 'vegetables', sources: [
-    { name: 'Local Market', price: 65.00, lastUpdated: '2 hours ago', reliability: 'high' },
-    { name: 'Tuskys', price: 68.00, lastUpdated: '6 hours ago', reliability: 'medium' }
+    { name: 'Local Market', price: 65.00, lastUpdated: '2 hours ago', reliability: 'high' }
   ]},
   { name: 'Nyanya', englishName: 'Tomatoes', currentPrice: 55.00, previousPrice: 60.00, county: 'Eldoret', unit: 'kg', category: 'vegetables', sources: [
     { name: 'Naivas Supermarket', price: 55.00, lastUpdated: '1 hour ago', reliability: 'high' },
@@ -144,8 +136,7 @@ export const foodPricesData: FoodItem[] = [
     { name: 'New KCC', price: 50.00, lastUpdated: '2 hours ago', reliability: 'high' },
     { name: 'Brookside', price: 51.00, lastUpdated: '4 hours ago', reliability: 'high' }
   ]},
-  { name: 'Ndizi', englishName: 'Bananas', currentPrice: 80.00, previousPrice: 85.00, county: 'Kisumu', unit: 'bunch', category: 'fruits', sources: [
-    { name: 'Tuskys', price: 80.00, lastUpdated: '3 hours ago', reliability: 'high' },
+  { name: 'Ndizi', englishName: 'Bananas', currentPrice: 78.00, previousPrice: 85.00, county: 'Kisumu', unit: 'bunch', category: 'fruits', sources: [
     { name: 'Local Market', price: 78.00, lastUpdated: '1 day ago', reliability: 'medium' }
   ]},
 ];
