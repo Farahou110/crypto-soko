@@ -3,7 +3,7 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { TrendingUp, TrendingDown, Calendar, MapPin, BarChart3, Activity, Building2, Clock } from 'lucide-react';
+import { TrendingUp, TrendingDown, Calendar, MapPin, BarChart3, Activity, Building2, Clock, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -346,9 +346,10 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
                             href={source.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="font-semibold text-blue-600 dark:text-blue-400 text-sm hover:underline"
+                            className="font-semibold text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center gap-1.5 transition-colors hover:text-blue-700 dark:hover:text-blue-300"
                           >
                             {source.name}
+                            <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         ) : (
                           <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
