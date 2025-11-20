@@ -228,6 +228,7 @@ export type Database = {
           created_at: string | null
           id: string
           price: number
+          product_url: string | null
           seller_id: string | null
           updated_at: string | null
         }
@@ -237,6 +238,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           price: number
+          product_url?: string | null
           seller_id?: string | null
           updated_at?: string | null
         }
@@ -246,6 +248,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           price?: number
+          product_url?: string | null
           seller_id?: string | null
           updated_at?: string | null
         }
