@@ -59,8 +59,8 @@ serve(async (req) => {
                 role: 'system',
                 content: `You are a price extraction assistant. Extract food commodity prices from HTML content. 
                 Return ONLY a JSON array of items with this structure:
-                [{"name": "item name", "price": number, "unit": "kg/liter/piece", "category": "cereals/vegetables/fruits/dairy/meat/other"}]
-                Focus on staple foods and common groceries. If no prices found, return empty array.`
+                [{"name": "item name", "price": number, "unit": "kg/liter/piece", "category": "cereals/vegetables/fruits/dairy/meat/other", "product_url": "full URL to the specific product page"}]
+                Focus on staple foods and common groceries. Extract the complete product URL for each item. If no prices found, return empty array.`
               },
               {
                 role: 'user',
@@ -83,9 +83,10 @@ serve(async (req) => {
                           name: { type: "string" },
                           price: { type: "number" },
                           unit: { type: "string" },
-                          category: { type: "string" }
+                          category: { type: "string" },
+                          product_url: { type: "string" }
                         },
-                        required: ["name", "price", "unit", "category"]
+                        required: ["name", "price", "unit", "category", "product_url"]
                       }
                     }
                   },
@@ -176,6 +177,7 @@ serve(async (req) => {
                 commodity_id: commodityId,
                 county_id: county.id,
                 price: item.price,
+                product_url: item.product_url || null,
                 seller_id: null // System-generated prices
               });
 
