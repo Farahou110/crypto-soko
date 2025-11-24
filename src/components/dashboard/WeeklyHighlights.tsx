@@ -1,131 +1,69 @@
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Star, AlertTriangle } from 'lucide-react';
-import { foodPricesData } from '@/data/foodPrices';
+import { useRealtimePrices } from '@/hooks/useRealtimePrices';
 
 const WeeklyHighlights = () => {
-  // Calculate some mock highlights based on existing data
-  const getHighlights = () => {
-    const prices = foodPricesData.map(item => item.currentPrice);
-    const maxPrice = Math.max(...prices);
-    const minPrice = Math.min(...prices);
-    
-    const mostExpensive = foodPricesData.find(item => item.currentPrice === maxPrice);
-    const cheapest = foodPricesData.find(item => item.currentPrice === minPrice);
-    
+  const { prices } = useRealtimePrices();
+
+  const highlights = useMemo(() => {
+    if (!prices || prices.length === 0) {
+      return { mostExpensive: null, cheapest: null, avgPrice: '0.00', totalItems: 0 };
+    }
+    const numericPrices = prices.map(p => (typeof p.price === 'string' ? parseFloat(p.price) : (p.price ?? 0)));
+    const maxPrice = Math.max(...numericPrices);
+    const minPrice = Math.min(...numericPrices);
+
+    const mostExpensive = prices.find(p => (typeof p.price === 'string' ? parseFloat(p.price) : p.price) === maxPrice);
+    const cheapest = prices.find(p => (typeof p.price === 'string' ? parseFloat(p.price) : p.price) === minPrice);
+
+    const avgPrice = (numericPrices.reduce((a, b) => a + b, 0) / numericPrices.length).toFixed(2);
+
     return {
       mostExpensive,
       cheapest,
-      avgPrice: (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2),
-      totalItems: foodPricesData.length
+      avgPrice,
+      totalItems: prices.length
     };
-  };
-
-  const highlights = getHighlights();
-
-  const weeklyData = [
-    {
-      title: "Biggest Price Increase",
-      item: "Beef (Premium)",
-      change: "+15.2%",
-      icon: TrendingUp,
-      color: "text-red-600",
-      description: "Significant increase due to supply constraints"
-    },
-    {
-      title: "Best Value This Week",
-      item: highlights.cheapest?.englishName || "Rice",
-      change: `KSh ${highlights.cheapest?.currentPrice || 50}`,
-      icon: Star,
-      color: "text-green-600",
-      description: "Excellent quality at competitive price"
-    },
-    {
-      title: "Price Drop Alert",
-      item: "Tomatoes",
-      change: "-8.5%",
-      icon: TrendingDown,
-      color: "text-green-600",
-      description: "Seasonal harvest driving prices down"
-    },
-    {
-      title: "Supply Warning",
-      item: "Cooking Oil",
-      change: "Low Stock",
-      icon: AlertTriangle,
-      color: "text-orange-600",
-      description: "Limited availability across counties"
-    }
-  ];
+  }, [prices]);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Average Price</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSh {highlights.avgPrice}</div>
-            <p className="text-xs text-gray-500">Across all items</p>
-          </CardContent>
-        </Card>
+    <Card>
+      <CardHeader>
+        <CardTitle>Weekly Highlights</CardTitle>
+        <CardDescription>Top changes and summaries from the last 7 days</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 border rounded">
+            <h3 className="font-semibold text-sm">Most Expensive</h3>
+            <p className="text-lg font-bold">{highlights.mostExpensive?.commodities?.name ?? '—'}</p>
+            <p className="text-sm text-muted-foreground">
+              KES {(highlights.mostExpensive ? (typeof highlights.mostExpensive.price === 'string' ? parseFloat(highlights.mostExpensive.price) : highlights.mostExpensive.price) : '—')}
+            </p>
+          </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Most Expensive</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSh {highlights.mostExpensive?.currentPrice}</div>
-            <p className="text-xs text-gray-500">{highlights.mostExpensive?.englishName}</p>
-          </CardContent>
-        </Card>
+          <div className="p-4 border rounded">
+            <h3 className="font-semibold text-sm">Cheapest</h3>
+            <p className="text-lg font-bold">{highlights.cheapest?.commodities?.name ?? '—'}</p>
+            <p className="text-sm text-muted-foreground">
+              KES {(highlights.cheapest ? (typeof highlights.cheapest.price === 'string' ? parseFloat(highlights.cheapest.price) : highlights.cheapest.price) : '—')}
+            </p>
+          </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Best Deal</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSh {highlights.cheapest?.currentPrice}</div>
-            <p className="text-xs text-gray-500">{highlights.cheapest?.englishName}</p>
-          </CardContent>
-        </Card>
+          <div className="p-4 border rounded">
+            <h3 className="font-semibold text-sm">Average Price</h3>
+            <p className="text-lg font-bold">KES {highlights.avgPrice}</p>
+            <p className="text-sm text-muted-foreground">Across {highlights.totalItems} items</p>
+          </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Items</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{highlights.totalItems}</div>
-            <p className="text-xs text-gray-500">Tracked products</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {weeklyData.map((item, index) => {
-          const IconComponent = item.icon;
-          return (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
-                  <IconComponent className={`h-6 w-6 ${item.color}`} />
-                </div>
-                <CardDescription>{item.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">{item.item}</span>
-                  <span className={`font-bold ${item.color}`}>{item.change}</span>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
+          <div className="p-4 border rounded">
+            <h3 className="font-semibold text-sm">Alerts</h3>
+            <p className="text-lg font-bold">No critical alerts</p>
+            <p className="text-sm text-muted-foreground">Monitor notifications for price spikes</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

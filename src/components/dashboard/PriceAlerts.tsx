@@ -1,264 +1,132 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Bell, Plus, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const PriceAlerts = () => {
-  const [alerts, setAlerts] = useState([
-    {
-      id: 1,
-      item: 'Rice (1kg)',
-      targetPrice: 70,
-      currentPrice: 75,
-      type: 'below',
-      county: 'Nairobi',
-      active: true
-    },
-    {
-      id: 2,
-      item: 'Tomatoes (1kg)',
-      targetPrice: 90,
-      currentPrice: 82,
-      type: 'above',
-      county: 'Kisumu',
-      active: true
-    },
-    {
-      id: 3,
-      item: 'Beans (1kg)',
-      targetPrice: 130,
-      currentPrice: 135,
-      type: 'below',
-      county: 'Mombasa',
-      active: false
-    },
-    {
-      id: 4,
-      item: 'Maize (1kg)',
-      targetPrice: 60,
-      currentPrice: 55,
-      type: 'above',
-      county: 'Nakuru',
-      active: true
+type AlertRow = {
+  id: string;
+  user_id: string;
+  commodity_id: string;
+  county_id?: string | null;
+  alert_type: string;
+  threshold_price?: number | null;
+  is_active?: boolean | null;
+  created_at?: string | null;
+  commodities?: { id?: string; name?: string } | null;
+  counties?: { id?: string; name?: string } | null;
+};
+
+export default function PriceAlerts() {
+  const [alerts, setAlerts] = useState<AlertRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({ commodity_id: '', alert_type: 'price_threshold', threshold_price: '' });
+
+  const fetchAlerts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('price_alerts')
+        .select('id, user_id, commodity_id, county_id, alert_type, threshold_price, is_active, created_at, commodities(id, name), counties(id, name)')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setAlerts(data ?? []);
+    } catch (err) {
+      console.error('Error loading alerts', err);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
-  const [newAlert, setNewAlert] = useState({
-    item: '',
-    targetPrice: '',
-    type: 'below',
-    county: 'Nairobi'
-  });
+  useEffect(() => { fetchAlerts(); }, []);
 
-  const [showAddForm, setShowAddForm] = useState(false);
-
-  const recentAlerts = [
-    {
-      item: 'Tomatoes',
-      message: 'Price dropped to KSh 82 (target: KSh 90)',
-      time: '2 hours ago',
-      type: 'success'
-    },
-    {
-      item: 'Cooking Oil',
-      message: 'Price increased to KSh 320 (target: KSh 300)',
-      time: '5 hours ago',
-      type: 'warning'
-    },
-    {
-      item: 'Sugar',
-      message: 'Price dropped to KSh 145 (target: KSh 150)',
-      time: '1 day ago',
-      type: 'success'
-    }
-  ];
-
-  const handleAddAlert = () => {
-    if (newAlert.item && newAlert.targetPrice) {
-      const alert = {
-        id: alerts.length + 1,
-        item: newAlert.item,
-        targetPrice: parseFloat(newAlert.targetPrice),
-        currentPrice: parseFloat(newAlert.targetPrice) + 10, // Mock current price
-        type: newAlert.type,
-        county: newAlert.county,
-        active: true
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.commodity_id) return;
+    setCreating(true);
+    try {
+      const payload = {
+        commodity_id: form.commodity_id,
+        alert_type: form.alert_type,
+        threshold_price: form.threshold_price ? parseFloat(form.threshold_price) : null,
+        is_active: true
       };
-      setAlerts([...alerts, alert]);
-      setNewAlert({ item: '', targetPrice: '', type: 'below', county: 'Nairobi' });
-      setShowAddForm(false);
+      const { data, error } = await supabase.from('price_alerts').insert(payload).select().single();
+      if (error) throw error;
+      setAlerts(prev => [data, ...prev]);
+      setForm({ commodity_id: '', alert_type: 'price_threshold', threshold_price: '' });
+    } catch (err) {
+      console.error('Error creating alert', err);
+    } finally {
+      setCreating(false);
     }
   };
 
-  const handleDeleteAlert = (id: number) => {
-    setAlerts(alerts.filter(alert => alert.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase.from('price_alerts').delete().eq('id', id);
+      if (error) throw error;
+      setAlerts(prev => prev.filter(a => a.id !== id));
+    } catch (err) {
+      console.error('Error deleting alert', err);
+    }
   };
 
-  const toggleAlert = (id: number) => {
-    setAlerts(alerts.map(alert => 
-      alert.id === id ? { ...alert, active: !alert.active } : alert
-    ));
+  const toggleActive = async (id: string, current: boolean | null | undefined) => {
+    try {
+      const { data, error } = await supabase.from('price_alerts').update({ is_active: !current }).eq('id', id).select().single();
+      if (error) throw error;
+      setAlerts(prev => prev.map(a => (a.id === id ? data : a)));
+    } catch (err) {
+      console.error('Error toggling alert', err);
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Price Alerts</h2>
-          <p className="text-gray-600">Get notified when prices reach your target</p>
-        </div>
-        <Button 
-          onClick={() => setShowAddForm(true)}
-          className="bg-emerald-600 hover:bg-emerald-700"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Create Alert
-        </Button>
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Price Alerts</CardTitle>
+        <CardDescription>Tracked price alerts</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleCreate} className="flex gap-2 mb-4">
+          <Input placeholder="Commodity ID" value={form.commodity_id} onChange={(e) => setForm({ ...form, commodity_id: e.target.value })} />
+          <Select value={form.alert_type} onValueChange={(v) => setForm({ ...form, alert_type: v })}>
+            <SelectTrigger className="w-[180px]"><SelectValue/></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="price_threshold">Price threshold</SelectItem>
+              <SelectItem value="price_increase">Price increase</SelectItem>
+              <SelectItem value="price_decrease">Price decrease</SelectItem>
+            </SelectContent>
+          </Select>
+          <Input placeholder="Threshold" value={form.threshold_price} onChange={(e) => setForm({ ...form, threshold_price: e.target.value })} />
+          <Button type="submit" disabled={creating}>{creating ? 'Adding...' : 'Add'}</Button>
+        </form>
 
-      {showAddForm && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Create New Price Alert</CardTitle>
-            <CardDescription>
-              Set up notifications for when prices meet your criteria
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Product Name</label>
-                <Input
-                  placeholder="e.g., Rice (1kg)"
-                  value={newAlert.item}
-                  onChange={(e) => setNewAlert({...newAlert, item: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Target Price (KSh)</label>
-                <Input
-                  type="number"
-                  placeholder="e.g., 70"
-                  value={newAlert.targetPrice}
-                  onChange={(e) => setNewAlert({...newAlert, targetPrice: e.target.value})}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Alert Type</label>
-                <select 
-                  className="w-full p-2 border rounded-md"
-                  value={newAlert.type}
-                  onChange={(e) => setNewAlert({...newAlert, type: e.target.value})}
-                >
-                  <option value="below">Notify when price goes below</option>
-                  <option value="above">Notify when price goes above</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">County</label>
-                <select 
-                  className="w-full p-2 border rounded-md"
-                  value={newAlert.county}
-                  onChange={(e) => setNewAlert({...newAlert, county: e.target.value})}
-                >
-                  <option value="Nairobi">Nairobi</option>
-                  <option value="Mombasa">Mombasa</option>
-                  <option value="Kisumu">Kisumu</option>
-                  <option value="Nakuru">Nakuru</option>
-                  <option value="Eldoret">Eldoret</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex space-x-2">
-              <Button onClick={handleAddAlert}>Create Alert</Button>
-              <Button variant="outline" onClick={() => setShowAddForm(false)}>
-                Cancel
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Alerts</CardTitle>
-            <CardDescription>
-              Your current price monitoring alerts
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {alerts.map((alert) => (
-              <div key={alert.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <span className="font-semibold">{alert.item}</span>
-                    <Badge variant={alert.active ? "default" : "secondary"}>
-                      {alert.active ? "Active" : "Paused"}
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    <p>Target: KSh {alert.targetPrice} ({alert.type})</p>
-                    <p>Current: KSh {alert.currentPrice} in {alert.county}</p>
-                  </div>
+        {loading ? (
+          <p className="text-sm text-muted-foreground">Loading alerts…</p>
+        ) : alerts.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No alerts yet.</p>
+        ) : (
+          <ul className="space-y-2">
+            {alerts.map(a => (
+              <li key={a.id} className="p-2 border rounded flex justify-between items-center">
+                <div>
+                  <div className="font-medium">{a.commodities?.name ?? a.commodity_id}</div>
+                  <div className="text-sm text-muted-foreground">{a.alert_type} {a.threshold_price ? `@ KES ${a.threshold_price}` : ''}</div>
+                  <div className="text-xs text-gray-500">{a.counties?.name ?? 'All counties'}</div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => toggleAlert(alert.id)}
-                  >
-                    {alert.active ? 'Pause' : 'Resume'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDeleteAlert(alert.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => toggleActive(a.id, a.is_active)}>{a.is_active ? 'Disable' : 'Enable'}</Button>
+                  <Button variant="destructive" onClick={() => handleDelete(a.id)}>Delete</Button>
                 </div>
-              </div>
+              </li>
             ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Notifications</CardTitle>
-            <CardDescription>
-              Latest price alert notifications
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {recentAlerts.map((notification, index) => (
-              <div key={index} className="flex items-start space-x-3 p-3 border rounded-lg">
-                <div className={`p-2 rounded-full ${
-                  notification.type === 'success' ? 'bg-green-100' : 'bg-orange-100'
-                }`}>
-                  {notification.type === 'success' ? (
-                    <TrendingDown className="h-4 w-4 text-green-600" />
-                  ) : (
-                    <TrendingUp className="h-4 w-4 text-orange-600" />
-                  )}
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-sm">{notification.item}</p>
-                  <p className="text-sm text-gray-600">{notification.message}</p>
-                  <p className="text-xs text-gray-400">{notification.time}</p>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
-};
-
-export default PriceAlerts;
+}
