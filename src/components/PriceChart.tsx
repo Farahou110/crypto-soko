@@ -341,21 +341,40 @@ const PriceChart: React.FC<PriceChartProps> = ({ item, isOpen, onClose }) => {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Building2 className="h-4 w-4 text-blue-600" />
-                        {source.url ? (
-                          <a 
-                            href={source.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="font-semibold text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center gap-1.5 transition-colors hover:text-blue-700 dark:hover:text-blue-300"
-                          >
-                            {source.name}
-                            <ExternalLink className="h-3.5 w-3.5" />
-                          </a>
-                        ) : (
-                          <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
-                            {source.name}
-                          </h4>
-                        )}
+                        {(() => {
+                          // Generate search URL based on supermarket name and item
+                          const getSearchUrl = (sourceName: string, itemName: string) => {
+                            const searchTerm = encodeURIComponent(itemName.toLowerCase().replace(/\s+/g, '+'));
+                            const supermarketUrls: Record<string, string> = {
+                              'naivas': `https://naivas.online/search?term=${searchTerm}`,
+                              'naivas supermarket': `https://naivas.online/search?term=${searchTerm}`,
+                              'carrefour': `https://www.carrefour.ke/mafken/en/search/?text=${searchTerm}`,
+                              'carrefour kenya': `https://www.carrefour.ke/mafken/en/search/?text=${searchTerm}`,
+                              'quickmart': `https://quickmart.co.ke/search?q=${searchTerm}`,
+                              'chandarana': `https://chandarana.co.ke/?s=${searchTerm}&post_type=product`,
+                              'chandarana foodplus': `https://chandarana.co.ke/?s=${searchTerm}&post_type=product`,
+                            };
+                            const key = sourceName.toLowerCase();
+                            return supermarketUrls[key] || source.url;
+                          };
+                          const searchUrl = getSearchUrl(source.name, item.name);
+                          
+                          return searchUrl ? (
+                            <a 
+                              href={searchUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="font-semibold text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center gap-1.5 transition-colors hover:text-blue-700 dark:hover:text-blue-300"
+                            >
+                              {source.name}
+                              <ExternalLink className="h-3.5 w-3.5" />
+                            </a>
+                          ) : (
+                            <h4 className="font-semibold text-gray-800 dark:text-white text-sm">
+                              {source.name}
+                            </h4>
+                          );
+                        })()}
                       </div>
                       <Badge 
                         variant={source.reliability === 'high' ? 'default' : 'secondary'}
