@@ -47,11 +47,18 @@ export default function PriceAlerts() {
     if (!form.commodity_id) return;
     setCreating(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.error('User not authenticated');
+        setCreating(false);
+        return;
+      }
       const payload = {
         commodity_id: form.commodity_id,
         alert_type: form.alert_type,
         threshold_price: form.threshold_price ? parseFloat(form.threshold_price) : null,
-        is_active: true
+        is_active: true,
+        user_id: user.id
       };
       const { data, error } = await supabase.from('price_alerts').insert(payload).select().single();
       if (error) throw error;
